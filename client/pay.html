@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Płatność – JL Pro Bike</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../supabaseClient.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
+
+    :root{
+      --bg1:#0b0f17;
+      --bg2:#111827;
+      --line:rgba(255,255,255,.10);
+      --text:#e5e7eb;
+      --muted:rgba(229,231,235,.72);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,Arial,sans-serif;
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(255,255,255,.08), transparent 55%),
+        radial-gradient(900px 500px at 80% 0%, rgba(255,255,255,.06), transparent 50%),
+        linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:var(--text);
+      min-height:100vh;
+      padding:28px;
+    }
+
+    .wrap{width:min(1100px,100%);margin:auto}
+    .top{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;
+    }
+    .top a{
+      color:var(--text);text-decoration:none;font-weight:900;font-size:13px;
+      border:1px solid var(--line);padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04)
+    }
+    .top a:hover{background:rgba(255,255,255,.07)}
+
+    .card{
+      border-radius:20px;overflow:hidden;border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+      box-shadow:0 24px 70px rgba(0,0,0,.45);
+    }
+    .inner{
+      padding:26px;
+      background:
+        radial-gradient(600px 240px at 20% 15%, rgba(255,255,255,.12), transparent 60%),
+        radial-gradient(600px 240px at 95% 10%, rgba(255,255,255,.08), transparent 55%),
+        linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.45));
+    }
+
+    h1{margin:0 0 8px;font-size:34px;font-weight:900}
+    .desc{margin:0;color:var(--muted);line-height:1.55}
+
+    .grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    .box{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.18);
+      border-radius:16px;
+      padding:16px;
+      min-height:120px;
+    }
+    .label{
+      font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+      color:rgba(229,231,235,.75);font-weight:800;
+      margin-bottom:10px;
+    }
+    .value{
+      font-size:22px;font-weight:900;letter-spacing:.2px;
+      white-space:pre-wrap;word-break:break-word;
+    }
+    .sub{margin-top:10px;color:var(--muted);font-size:13px;line-height:1.45}
+
+    .btn{
+      margin-top:14px;
+      display:inline-flex;align-items:center;justify-content:center;
+      padding:10px 12px;border-radius:12px;font-weight:900;font-size:13px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);color:var(--text);cursor:pointer;
+      user-select:none;
+    }
+    .btn:hover{background:rgba(255,255,255,.10)}
+
+    .status{
+      margin-top:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.18);
+      border-radius:16px;
+      padding:14px 16px;
+      color:rgba(229,231,235,.90);
+    }
+    .ok{color:#86efac;font-weight:900}
+    .warn{color:#fde68a;font-weight:900}
+    .err{color:#fecaca;font-weight:900}
+
+    @media(max-width:860px){
+      .grid{grid-template-columns:1fr}
+      h1{font-size:28px}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="top">
+      <a href="index.html">← Start</a>
+      <a href="buy.html">Kup ponownie</a>
+    </div>
+
+    <div class="card">
+      <div class="inner">
+        <h1>Płatność</h1>
+        <p class="desc">
+          Wybierz sposób płatności: <b>BLIK na telefon</b> albo <b>przelew</b>.<br>
+          Po zaksięgowaniu płatności voucher zostanie aktywowany, a kod dostaniesz maksymalnie w <b>5 minut</b>.
+        </p>
+
+        <div class="grid">
+          <div class="box">
+            <div class="label">Kwota</div>
+            <div class="value" id="amountVal">—</div>
+          </div>
+
+          <div class="box">
+            <div class="label">Tytuł / opis</div>
+            <div class="value" id="titleVal">—</div>
+            <button class="btn" id="copyTitleBtn" type="button">Kopiuj tytuł</button>
+          </div>
+
+          <div class="box">
+            <div class="label">Blik na telefon</div>
+            <div class="value" id="blikVal">—</div>
+            <div class="sub">
+              W aplikacji banku wybierz BLIK → na telefon, wpisz kwotę i w polu „tytuł/opis” wklej kod powyżej.
+            </div>
+            <button class="btn" id="copyBlikBtn" type="button">Kopiuj numer</button>
+          </div>
+
+          <div class="box">
+            <div class="label">Przelew bankowy</div>
+            <div class="value" id="bankVal">—</div>
+            <div class="sub">
+              Zrób przelew na konto, w tytule wpisz kod powyżej.
+            </div>
+            <button class="btn" id="copyBankBtn" type="button">Kopiuj konto</button>
+          </div>
+        </div>
+
+        <div class="status" id="statusBox">
+          <span class="warn">⏳ Oczekiwanie na płatność</span><br>
+          Po opłaceniu BLIK/przelewem poczekaj chwilę — aktywacja do 5 min.
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ====== UZUPEŁNIJ TU (2 linijki) ======
+  const BLIK_PHONE  = "+48 500 877 306";
+  const BANK_ACCOUNT = "50102055581111187707900090";
+  // =====================================
+
+  const sb = window.supabaseClient;
+
+  const amountVal = document.getElementById("amountVal");
+  const titleVal  = document.getElementById("titleVal");
+  const statusBox = document.getElementById("statusBox");
+
+  const blikVal = document.getElementById("blikVal");
+  const bankVal = document.getElementById("bankVal");
+
+  const copyTitleBtn = document.getElementById("copyTitleBtn");
+  const copyBlikBtn  = document.getElementById("copyBlikBtn");
+  const copyBankBtn  = document.getElementById("copyBankBtn");
+
+  blikVal.textContent = BLIK_PHONE;
+  bankVal.textContent = BANK_ACCOUNT;
+
+  const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  const params = new URLSearchParams(location.search);
+  const orderId = params.get("order") || params.get("id") || localStorage.getItem("lastOrderId");
+
+  function copyText(txt){
+    return navigator.clipboard.writeText(txt);
+  }
+
+  copyTitleBtn.addEventListener("click", async () => {
+    try{ await copyText(titleVal.textContent.trim()); }
+    catch{ alert("Nie mogę skopiować — skopiuj ręcznie."); }
+  });
+  copyBlikBtn.addEventListener("click", async () => {
+    try{ await copyText(BLIK_PHONE); }
+    catch{ alert("Nie mogę skopiować — skopiuj ręcznie."); }
+  });
+  copyBankBtn.addEventListener("click", async () => {
+    try{ await copyText(BANK_ACCOUNT); }
+    catch{ alert("Nie mogę skopiować — skopiuj ręcznie."); }
+  });
+
+  if(!orderId || !uuidRe.test(orderId)){
+    statusBox.innerHTML = `<span class="err">Niepoprawne ID zamówienia.</span><br>Wróć i spróbuj ponownie.`;
+  }else{
+    localStorage.setItem("lastOrderId", orderId);
+    boot();
+  }
+
+  async function boot(){
+    await refresh();
+    setInterval(refresh, 5000);
+  }
+
+  async function refresh(){
+    // Pobierz dane zamówienia przez RPC (omija problem RLS anon select)
+    const { data, error } = await sb.rpc("get_order_public", { p_order: orderId });
+
+    if(error || !data || !data.length){
+      statusBox.innerHTML = `<span class="err">Nie mogę pobrać zamówienia.</span><br><small>${error?.message || ""}</small>`;
+      return;
+    }
+
+    const o = data[0];
+
+    amountVal.textContent = o.amount_text || "—";
+    titleVal.textContent  = o.pay_title || o.id || "—";
+
+    const s = String(o.status || "").toLowerCase();
+
+    if(s === "paid"){
+      statusBox.innerHTML = `<span class="ok">✔ Płatność zaksięgowana</span><br>Za chwilę voucher zostanie aktywowany.`;
+    }else{
+      statusBox.innerHTML = `<span class="warn">⏳ Oczekiwanie na płatność</span><br>Po opłaceniu BLIK/przelewem poczekaj chwilę — aktywacja do 5 min.`;
+    }
+  }
+</script>
+</body>
+</html>

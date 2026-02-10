@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Panel vouchera – JL Pro Bike</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseClient.js"></script>
+  <script defer src="panel.js"></script>
+
+  <link rel="stylesheet" href="panel.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <img class="brandLogo" src="assets/logo.png" alt="JL Pro Bike" onerror="this.style.display='none'">
+    <div class="brandText">
+      <div class="brandTitle">Panel vouchera</div>
+      <div class="brandSub">JL Pro Bike</div>
+    </div>
+  </div>
+
+  <div class="user" id="userInfo"></div>
+</header>
+
+<main class="wrap">
+
+  <!-- LOGIN -->
+  <section id="loginBox" class="card">
+    <h2>Logowanie</h2>
+
+    <div class="grid">
+      <input id="email" type="email" placeholder="Email" autocomplete="email" />
+      <input id="password" type="password" placeholder="Hasło" autocomplete="current-password" />
+    </div>
+
+    <div class="actions">
+      <button onclick="login()">Zaloguj</button>
+      <button class="ghost" onclick="register()">Pierwsze logowanie (utwórz konto)</button>
+    </div>
+
+    <p id="loginMsg" class="msg"></p>
+
+    <p class="backRow">
+      <a class="backLink" href="index.html">← Powrót do startu</a>
+    </p>
+  </section>
+
+  <!-- PANEL -->
+  <section id="panelBox" class="card" style="display:none;">
+
+    <!-- CREATE -->
+    <div class="sectionHead">
+      <h2>Utwórz voucher</h2>
+      <div class="hint">Szybkie wystawienie kuponu (admin)</div>
+    </div>
+
+    <div class="createGrid">
+      <input id="v_amount" placeholder="Kwota (np. 150 zł)" />
+      <input id="v_name" placeholder="Imię i nazwisko obdarowanego (opcjonalnie)" />
+      <input id="v_email" placeholder="Email obdarowanego (opcjonalnie)" />
+    </div>
+
+    <div class="actions">
+      <button onclick="createVoucherNow()">Utwórz</button>
+      <button class="ghost" onclick="clearCreate()">Wyczyść</button>
+      <button class="danger" onclick="logout()">Wyloguj</button>
+    </div>
+
+    <p id="createMsg" class="msg"></p>
+
+    <hr />
+
+    <!-- USE VOUCHER -->
+    <div class="sectionHead">
+      <h2>Wykorzystaj voucher</h2>
+      <div class="hint">Wpisz kod (JL-XXXXXX) lub UUID</div>
+    </div>
+
+    <div class="createGrid">
+      <input id="use_code" placeholder="Kod / UUID" />
+      <input id="use_note" placeholder="Notatka (opcjonalnie) np. 'przegląd + centrowanie'" />
+    </div>
+
+    <div class="actions">
+      <button onclick="useVoucher()">Oznacz jako USED</button>
+      <button class="ghost" onclick="clearUse()">Wyczyść</button>
+    </div>
+
+    <p id="useMsg" class="msg"></p>
+
+    <hr />
+
+    <!-- ONE TABLE -->
+    <div class="sectionTitleRow">
+      <div>
+        <h2>Wszystkie wpisy</h2>
+        <div class="sub">Zamówienia + vouchery w jednym miejscu</div>
+      </div>
+
+      <div class="rightTools">
+        <select id="filterStatus">
+          <option value="all">Wszystkie</option>
+          <option value="active">Tylko aktywne</option>
+          <option value="used">Tylko USED</option>
+          <option value="pending">Tylko pending</option>
+          <option value="paid">Tylko paid</option>
+        </select>
+
+        <button class="ghost small" onclick="loadAll()">Odśwież</button>
+        <button class="danger small" id="deleteSelectedBtn" onclick="deleteSelected()" disabled>Usuń zaznaczone</button>
+      </div>
+    </div>
+
+    <div class="tableWrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="chkCol">
+              <input type="checkbox" id="checkAll" title="Zaznacz wszystkie">
+            </th>
+            <th>Data</th>
+            <th>Kod</th>
+            <th>Kwota</th>
+            <th>Dla</th>
+            <th>Status</th>
+            <th>Akcje</th>
+          </tr>
+        </thead>
+        <tbody id="list"></tbody>
+      </table>
+    </div>
+
+    <div class="bottomRow">
+      <a class="backLink" href="index.html">← Powrót do startu</a>
+    </div>
+
+  </section>
+
+</main>
+
+</body>
+</html>

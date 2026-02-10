@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Voucher – JL Pro Bike</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
+
+    :root{
+      --bg1:#0b0f17;--bg2:#111827;
+      --line:rgba(255,255,255,.10);
+      --text:#e5e7eb;--muted:rgba(229,231,235,.72);
+    }
+
+    *{box-sizing:border-box}
+
+    /* ✅ FIX MOBILE “half page” */
+    html, body{
+      width:100%;
+      max-width:100%;
+      overflow-x:hidden;
+    }
+
+    body{
+      margin:0;
+      font-family:Inter,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(255,255,255,.08), transparent 55%),
+        radial-gradient(900px 500px at 80% 0%, rgba(255,255,255,.06), transparent 50%),
+        linear-gradient(180deg,var(--bg1),var(--bg2));
+      padding:28px;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .wrap{width:100%;max-width:980px;margin:auto}
+
+    /* TOP */
+    .top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:14px;
+      opacity:.95;
+    }
+    .top a{
+      color:var(--text);
+      text-decoration:none;
+      font-weight:900;
+      font-size:13px;
+      border:1px solid var(--line);
+      padding:10px 12px;
+      border-radius:12px;
+      background:rgba(255,255,255,.04);
+      flex:0 0 auto;
+    }
+    .top a:hover{background:rgba(255,255,255,.08)}
+
+    .hero{
+      border-radius:22px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      box-shadow:0 24px 70px rgba(0,0,0,.45);
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+    }
+
+    .heroInner{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      min-height:360px;
+    }
+
+    .left{
+      padding:28px;
+      background:
+        radial-gradient(700px 260px at 18% 14%, rgba(255,255,255,.12), transparent 60%),
+        radial-gradient(700px 260px at 95% 10%, rgba(255,255,255,.08), transparent 55%),
+        linear-gradient(180deg, rgba(0,0,0,.25), rgba(0,0,0,.45));
+    }
+
+    .right{
+      padding:26px;
+      border-left:1px dashed rgba(255,255,255,.18);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.25));
+      position:relative;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+    }
+
+    .logoBox{
+      width:86px;
+      height:86px;
+      border-radius:18px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      flex:0 0 auto;
+    }
+
+    .logoBox img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+
+    .brandTitle .name{
+      font-weight:900;
+      font-size:22px;
+      letter-spacing:.2px;
+      line-height:1.05;
+    }
+
+    .brandTitle .sub{
+      margin-top:8px;
+      font-weight:800;
+      font-size:12px;
+      color:var(--muted);
+      letter-spacing:.22em;
+      text-transform:uppercase;
+    }
+
+    .headline{margin:18px 0 0;font-size:34px;font-weight:900;line-height:1.05}
+    .desc{margin:12px 0 0;color:var(--muted);font-size:14px;line-height:1.6;max-width:520px}
+
+    .ctaRow{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:10px;
+      padding:12px 16px;border-radius:14px;
+      font-weight:900;font-size:14px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.14);
+      color:var(--text);text-decoration:none;
+      cursor:pointer;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .btn:hover{background:rgba(255,255,255,.18)}
+
+    .card{
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.18);
+      padding:16px;
+    }
+    .card h3{
+      margin:0;
+      font-size:13px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:rgba(229,231,235,.85);
+    }
+
+    .check{
+      margin-top:14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(0,0,0,.20);
+      padding:14px;
+    }
+
+    .checkRow{
+      margin-top:10px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap; /* ✅ klucz: nie rozpycha w bok */
+    }
+
+    .inp{
+      flex:1 1 220px;
+      min-width:0;     /* ✅ klucz: input nie wymusza szerokości */
+      padding:12px 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      font-weight:800;
+      outline:none;
+    }
+    .inp::placeholder{color:rgba(229,231,235,.45)}
+
+    .msg{margin-top:10px;min-height:18px;font-size:13px;color:rgba(229,231,235,.85)}
+    .err{color:#fecaca;font-weight:900}
+
+    .foot{
+      margin-top:14px;
+      font-size:12px;
+      color:rgba(229,231,235,.65);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    /* ✅ MOBILE */
+    @media(max-width:860px){
+      body{padding:16px}
+      .heroInner{grid-template-columns:1fr} /* ✅ 1 kolumna */
+      .right{border-left:none;border-top:1px dashed rgba(255,255,255,.18)}
+      .headline{font-size:30px}
+    }
+
+    @media(max-width:520px){
+      .btn{width:100%}         /* ✅ przycisk 100% */
+      .top{flex-wrap:wrap}
+    }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <a href="/">← Start</a>
+  </div>
+
+  <div class="hero">
+    <div class="heroInner">
+      <div class="left">
+        <div class="brand">
+          <div class="logoBox">
+            <img src="../assets/logo.png" alt="JL Pro Bike" onerror="this.style.display='none'">
+          </div>
+          <div class="brandTitle">
+            <div class="name">JL Pro Bike</div>
+            <div class="sub">vouchery podarunkowe</div>
+          </div>
+        </div>
+
+        <div class="headline">Podaruj serwis. Daj radość.</div>
+        <div class="desc">
+          Kup voucher podarunkowy do wykorzystania w serwisie JL Pro Bike.
+          Otrzymasz link do vouchera, który możesz skopiować, wydrukować lub wysłać SMS-em.
+        </div>
+
+        <div class="ctaRow">
+          <a class="btn" href="buy.html">Kup voucher</a>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="card">
+          <h3>Sprawdź voucher</h3>
+
+          <div class="check">
+            <div style="font-size:12px;color:var(--muted);font-weight:800;">Kod / ID vouchera</div>
+            <div class="checkRow">
+              <input id="code" class="inp" placeholder="np. JL-UTKAZU lub UUID" autocomplete="off" />
+              <button class="btn" id="openBtn" type="button">Otwórz</button>
+            </div>
+            <div class="msg" id="msg"></div>
+          </div>
+        </div>
+
+        <div class="foot">
+          <span>© JL Pro Bike</span>
+          <span style="opacity:.85">Voucher dostępny przez link</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const msg = document.getElementById("msg");
+  const codeInput = document.getElementById("code");
+  const openBtn = document.getElementById("openBtn");
+
+  const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  const shortRe = /^[A-Z]{2,5}-[A-Z0-9]{4,12}$/i;
+
+  function go(){
+    const v = (codeInput.value || "").trim();
+    msg.textContent = "";
+
+    if(!v){
+      msg.innerHTML = `<span class="err">Wpisz kod/ID.</span>`;
+      return;
+    }
+
+    if(uuidRe.test(v) || shortRe.test(v)){
+      location.href = "voucher.html?id=" + encodeURIComponent(v);
+      return;
+    }
+
+    msg.innerHTML = `<span class="err">To nie wygląda jak poprawny kod.</span>`;
+  }
+
+  openBtn.addEventListener("click", go);
+  codeInput.addEventListener("keydown", (e) => {
+    if(e.key === "Enter") go();
+  });
+</script>
+
+</body>
+</html>
